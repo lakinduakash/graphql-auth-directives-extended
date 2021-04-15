@@ -20,7 +20,7 @@ Then import the schema directives you'd like to use and attach them during your 
 
 
 ```js
-import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-user-directives";
+import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-directives-extended";
 
 const augmentedSchema = makeAugmentedSchema({
   typeDefs,
