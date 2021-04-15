@@ -1,8 +1,8 @@
-# graphql-auth-user-directives
+# graphql-auth-directives-extended
 
 Add authentication to your GraphQL API with schema directives. Provides options for improved managing of permissions, 
 also for non-authenticated users, and manages conditional permission performing Neo4j lookups based on user defined 
-queries.
+queries. You can also provide your own permission schema that represent which scopes granted to roles.
 
 ## Schema directives for authorization
 
@@ -60,38 +60,17 @@ me: (parent, args, context) => {
 }
 ```
 
-A JWT must then be included in each GraphQL request in the Authorization header. For example, with Apollo Client:
-
-```js
-import { createHttpLink } from 'apollo-link-http';
-import { setContext } from 'apollo-link-context';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloClient } from 'apollo-client';
-
-
-const httpLink = createHttpLink({
-    uri: <YOUR_GRAPHQL_API_URI>
-});
-
-const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('id_token'); // here we are storing the JWT in localStorage
-    return {
-        headers: {
-            ...headers,
-            authorization: token ? `Bearer ${token}` : "",
-        }
-    }
-});
-
-const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache()
-});
-```
-
-If all is set up correctly you should be able to use the directives and resolvers that use any of these directives the roles and/or permissions will be attached to the user which is provided in the context.
-
 ## Configure
+
+### JSON based permission schema (optional)
+You might provide scopes directly to the encoded user. However you may also control the scopes of a role within your backend, changing it with either enviromental variable (`PERMISSIONS=base64_encoded_json`) or directly load the json object by calling `loadPermissionSchema($json)`. `loadPermissionSchema` must be called befor initilising the `schemaDirectives`. This will oevrride the environment variable `PERMISSIONS`. With this approach you do not depend on another system to refresh scopes.   
+To do so you need to define a JSON specified file, e.g.
+```json
+{
+  "role1": ["resource1:action1", "resource2:action2"],
+  "role2": ["resource3:action3", "resource4:action4"]
+}
+```
 
 ### Setting the authorization header name
 By default the package looks at the header name 'authorization' (capital letter sensitive). However you may specify the environment variable `AUTHORIZATION_HEADER` allowing for example for a header name like 'Application-Authorization', i.e.
@@ -113,15 +92,6 @@ or
 export JWT_SECRET=><YOUR_JWT_SECRET_KEY_HERE> //Server has the secret and will verify authenticity
 ```
 
-### JSON based scopes (optional)
-You might provide scopes directly to the encoded user. However you may also control the scopes of a role within your backend, changing it with a mere change of an environmental variable. With this approach you do not depend on another system to refresh scopes.   
-To do so you need to define a JSON specified file, e.g.
-```sh
-{
-  "role1": ["resource1:action1", "resource2:action2"],
-  "role2": ["resource3:action3", "resource4:action4"]
-}
-```
 Assuming your user has a provided role, this package will determine the corresponding permissions. To insert this JSON file you'll need to base64 encode it to add is as an environment variable, e.g.
 ```sh
 export PERMISSIONS=ewogICJyb2xlMSI6IFsicmVzb3VyY2UxOmFjdGlvbjEiLCAicmVzb3VyY2UyOmFjdGlvbjIiXSwKICAicm9sZTIiOiBbInJlc291cmNlMzphY3Rpb24zIiwgInJlc291cmNlNDphY3Rpb240Il0KfQ==
@@ -201,6 +171,39 @@ exports.resolver = {
 
 Note that it is a more trivial exercise to verify non-conditional scopes for this is merely a direct lookup in the 
 scopes of the user. Therefore this is not expected to be required to be exported.
+
+## Client configuration
+
+A JWT must then be included in each GraphQL request in the Authorization header. For example, with Apollo Client:
+
+```js
+import { createHttpLink } from 'apollo-link-http';
+import { setContext } from 'apollo-link-context';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client';
+
+
+const httpLink = createHttpLink({
+    uri: <YOUR_GRAPHQL_API_URI>
+});
+
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('id_token'); // here we are storing the JWT in localStorage
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : "",
+        }
+    }
+});
+
+const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache()
+});
+```
+
+If all is set up correctly you should be able to use the directives and resolvers that use any of these directives the roles and/or permissions will be attached to the user which is provided in the context.
 
 ## Running Tests Locally
 

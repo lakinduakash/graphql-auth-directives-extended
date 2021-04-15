@@ -1,5 +1,5 @@
 {
-  "name": "graphql-auth-user-directives",
+  "name": "graphql-auth-directives-extended",
   "version": "2.5.2",
   "description": "Add authorization to your GraphQL API using schema directives.",
   "main": "./dist/index.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lakinduakash/graphql-auth-user-directives.git"
+    "url": "git+https://github.com/lakinduakash/graphql-auth-directives-extended.git"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.13",
@@ -35,13 +35,14 @@
   "keywords": [
     "GraphQL",
     "authorization",
+    "role-based-authentication",
     "neo4j",
     "user"
   ],
   "author": "Lakindu Akash",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/lakinduakash/graphql-auth-user-directives/issues"
+    "url": "https://github.com/lakinduakash/graphql-auth-directives-extended/issues"
   },
   "jest": {
     "verbose": true,
@@ -57,7 +58,7 @@
       }
     ]
   },
-  "homepage": "https://github.com/lakinduakash/graphql-auth-user-directives#readme",
+  "homepage": "https://github.com/lakinduakash/graphql-auth-directives-extended#readme",
   "lint-staged": {
     "*.{js,json,css}": [
       "prettier --write",
