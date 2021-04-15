@@ -1,5 +1,5 @@
 {
-  "name": "graphql-auth-directives-extended",
+  "name": "@lakinduakash/graphql-auth-directives-extended",
   "version": "1.0.0",
   "description": "Add authorization to your GraphQL API using schema directives.",
   "main": "./dist/index.js",
