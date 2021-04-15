@@ -13,7 +13,7 @@ queries. You can also provide your own permission schema that represent which sc
 ## Quick start
 
 ```sh
-npm install --save graphql-auth-user-directives
+npm install --save graphql-auth-directives-extended
 ```
 
 Then import the schema directives you'd like to use and attach them during your GraphQL schema construction. For example using [neo4j-graphql.js' `makeAugmentedSchema`](https://grandstack.io/docs/neo4j-graphql-js-api.html#makeaugmentedschemaoptions-graphqlschema):
@@ -115,7 +115,7 @@ specifying the condition, however you'd like to name it).
 What you need to do is configure a query that is needed to check on whether this user is the owner. 
 
 ```$xslt
-import { conditionalQueryMap } from 'graphql-auth-user-directives';
+import { conditionalQueryMap } from 'graphql-auth-directives-extended';
 
 conditionalQueryMap.set(
     "object:isOwner",
@@ -149,7 +149,7 @@ code. Therefore you can now call the conditional permission check function:
 
 ```$xslt
 // Example of how this function could be used in a Query
-import { satisfiesConditionalScopes } from "graphql-auth-user-directives";
+import { satisfiesConditionalScopes } from "graphql-auth-directives-extended";
 
 exports.resolver = {
     Query: {
