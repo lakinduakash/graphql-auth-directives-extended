@@ -61,7 +61,7 @@ typings/
 
 .DS_Store
 
-dist/
+# dist/
 
 node-version
 neo4j-version
